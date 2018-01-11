@@ -1,0 +1,75 @@
+.case-inactive {
+    position: absolute;
+    background-color: white;
+    color: black;
+    border-radius: 40%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.case-active {
+    position: absolute;
+     background-color: black;
+     color: white;
+    border-radius: 40%;
+    text-align: center;
+    vertical-align: middle;
+}
+ 
+.plateau {
+    position: relative;
+    margin: auto;
+    background: transparent;
+    /*background-color: #971539;*/
+    padding: 0px;
+/*    border: 2px solid black*/
+}
+
+.bord-plateau {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #971539;
+    animation-fill-mode: forwards;
+  border-radius: 0%;
+  border: 2px solid #000;
+  -webkit-animation-name: Rotate;
+  -webkit-animation-duration: 3s;
+ /* -webkit-animation-iteration-count: infinite;*/
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: Rotate;
+  -moz-animation-duration: 3s;
+  /*-moz-animation-iteration-count: infinite;*/
+  -moz-animation-timing-function: linear;
+  -ms-animation-name: Rotate;
+  -ms-animation-duration: 3s;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-timing-function: linear;
+}
+
+@-webkit-keyframes Rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(45deg);
+  }
+}
+@-moz-keyframes Rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(45deg);
+  }
+}
+@-ms-keyframes Rotate {
+  from {
+    -ms-transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(45deg);
+  }
+}

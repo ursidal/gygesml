@@ -1,0 +1,11 @@
+.case {
+
+}
+
+#plateau {
+    position: relative;
+    margin: auto;
+    background-color: #eee;
+    padding: 20px;
+    border: 2px solid black
+}
