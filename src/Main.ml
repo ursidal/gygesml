@@ -90,6 +90,7 @@ let update model = function (* These should be simple enough to be self-explanat
   | Pions str ->  {model with pions=string_vers_array str}
   |ChangePions -> let nou = match model.pions with
                     |x when x = original -> defaut
+                    |x when x = defaut -> chiffre
                     |_ -> original
                   in
                   {model with pions=nou}
