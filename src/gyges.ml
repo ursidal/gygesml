@@ -109,7 +109,7 @@ let rec chemins partie n lchemin =
         lvoisins |> List.map (fun x -> x::lchemin) |> List.filter pas_recoupe |> List.map (fun lch -> chemins partie (n-1) lch) |> List.concat
 ;;
 
-let depl_possibles jeu case=
+let arrivees_possibles jeu case=
   match pion_dans_case jeu case with
   |Vide -> []
   |Val n -> let liste_chemins = chemins jeu n [case] in
@@ -138,6 +138,10 @@ let departs_possibles jeu joueur =
   List.filter (fun x -> (pion_dans_case jeu x)<>Vide) (List.map (fun x-> Case (x,ligne)) [1;2;3;4;5;6])
 ;;
   
+let mouv_possibles jeu joueur = 
+	let ld = departs_possibles jeu joueur 
+	in
+	(List.map (fun dep -> List.map (fun arr -> (dep,arr)) (arrivees_possibles jeu dep)) ld) |> List.concat
 
 let test = init_jeu();;
 
