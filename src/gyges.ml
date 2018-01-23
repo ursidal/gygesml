@@ -143,6 +143,45 @@ let mouv_possibles jeu joueur =
 	in
 	(List.map (fun dep -> List.map (fun arr -> (dep,arr)) (arrivees_possibles jeu dep)) ld) |> List.concat
 
+let rec string_of_vlist l=
+ 	match l with
+    |[] -> "."
+    |Vide::q -> " ;"^(string_of_vlist q)
+    |(Val k)::q -> (string_of_int k)^";"^(string_of_vlist q);;
+
+print_string (string_of_vlist [Val 1;Val 2;Vide;Val 3]);;
+
+(*let (|>) x f = f x;;*)
+let supp = [Val 1;Val 2;Val 3];;
+
+let compte_val k l = 
+    	List.fold_left (fun acc x -> if x = Val k then acc+1 else acc) 0 l
+        
+let ajout_possible l = 
+        	List.filter (fun x -> match x with 
+            	|Vide -> false
+                |Val k -> (compte_val k l)<2 ) supp;;
+                       
+let ligne_dep nb = 
+    let rec fait_dep n ll =
+    	if n = 0 then ll
+        else 
+        let ll_augment = List.fold_left 
+        					(fun acc x -> 
+                            		List.append  
+                                    	(List.map 
+                                        	(fun h -> h::x) 					
+                                            (ajout_possible x) 
+                                         ) 
+                                     	 acc) 
+                            [] 
+                            ll 
+        in fait_dep (n-1) ll_augment
+        in
+        fait_dep nb [[]];;
+ 
+
+
 let test = init_jeu();;
 
 let ajout f p = let (k,v) = p in ajout_cle f k v;;
