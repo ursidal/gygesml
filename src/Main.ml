@@ -14,6 +14,10 @@ type msg =
   | Choix of case
   [@@bs.deriving {accessors}] (* This is a nice quality-of-life addon from Bucklescript, it will generate function names for each constructor name, optional, but nice to cut down on code, this is unused in this example but good to have regardless *)
 
+type phase =
+  |DebutSud
+  |DebutNord
+  |Encours
 
 let original = [|{j|●|j};{j|○|j};{j|◎|j};{j|🞋|j}|];;
 
@@ -45,7 +49,8 @@ let pions config p =
 ;;
 
 type model =
-  { partie: (case * pion) list;
+  { phase: phase;
+    partie: (case * pion) list;
     joueur: joueur;
     pions: string array;
     desc: bool;
