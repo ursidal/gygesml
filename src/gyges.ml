@@ -36,6 +36,10 @@ let (|>) x f = f x;;
 
 let init_jeu ()= [] ;;
 
+let suivant = function
+	|Sud -> Nord
+	|Nord -> Sud
+
 let rec pion_dans_case partie case =
   match partie with
   |[] -> Vide
@@ -142,6 +146,10 @@ let mouv_possibles jeu joueur =
 	let ld = departs_possibles jeu joueur 
 	in
 	(List.map (fun dep -> List.map (fun arr -> (dep,arr)) (arrivees_possibles jeu dep)) ld) |> List.concat
+
+let jeu_suiv (pl,joueur) = 
+	let lmouv = mouv_possibles pl joueur in
+	List.map (fun m -> (mise_a_jour pl m, suivant joueur)) lmouv
 
 let rec string_of_vlist l=
  	match l with
