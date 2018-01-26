@@ -15,7 +15,9 @@ type case =
   |CaseSud
 ;;
 
-type deplacement =  case * case;;
+type deplacement =  
+	| Init of joueur * (case list)
+	| Depl of case * case;;
 
 type jeu = case*pion list;;
 *)
@@ -54,8 +56,14 @@ let ajout_cle f cle valeur =
 let cle_ajout cle valeur f = ajout_cle f cle valeur;;
 
 let mise_a_jour partie depl =
-  let (c1,c2) = depl in
-  let p1 = pion_dans_case partie c1 in
+  match depl with 
+  |Init (j,l) -> let ligne_init = match j with
+  				|Sud -> 1
+				|Nord -> 6 
+		 in
+		 let update_list = List.map2 (fun i v -> ((ligne_init,i),v)) [1;2;3;4;5;6] l
+		 in List.append update_list partie
+  |Depl (c1,c2) -> let p1 = pion_dans_case partie c1 in
   (c1,Vide)::(c2,p1):: partie
 ;;
 
