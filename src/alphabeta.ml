@@ -23,7 +23,7 @@ let rec fold_until fonction_et_test acc liste =
 			 if booleen 
 			 then acc2
 			 else fold_until fonction_et_test acc2 q;;		 
-
+(*
 let rec alphabeta (jeu,joueur) alpha beta n =
   let liste_coup = Gyges.mouv_possibles jeu joueur in
   if iswinner liste_coup joueur 
@@ -48,4 +48,42 @@ let rec alphabeta (jeu,joueur) alpha beta n =
 				then ((a,nou_score,nou_score,coup_suiv),false)
 				else ((a,b,nou_score,coup_suiv),true)
 	  in
-	  fold_until alphabeta (fun 
+	  fold_until alphabeta (fun *)
+	  
+	  
+let compar jeu j1 j2 = 
+	match jeu with 
+	|(_,Sud) -> (snd j2) - (snd j1)
+	|(_,Nord) -> (snd j1) - (snd j2)
+
+	  
+let recherche_ab jeu n =
+	if n=0 || estTerminal jeu 
+	then eval_jeu jeu
+	else
+		let lsuiv = jeu_suiv jeu in
+		let lalphab = List.map (fun j-> (j,alphabeta n minScore maxScore j)) lsuiv in
+		List.sort (compar jeu) lalphab |> List.hd |> fst
+
+let rec alphabeta n a b j =
+	if n = 0 || estTerminal j 
+	then eval_jeu j
+	else 
+		let lsuiv = jeu_suiv j in
+		let res = 
+			if estMaximisant j
+			then
+				let v = minScore in
+				fold_until maximin (v,a,b) lsuiv
+			else
+				let v = maxScore in
+				fold_until minimax (v,a,b) lsuiv
+		in fst3 res
+and maximin (v,a,b) j =
+	let v2 = max v (alphabeta (n-1) a b j) in
+	let a2 = max a v2 in
+	((v,a,b),a2>=b)
+and minimax (v,a,b) j =
+	let v2 = min v (alphabeta (n-1) a b j) in
+	let b2 = min b v2 in
+	((v,a,b),b2<=a)
