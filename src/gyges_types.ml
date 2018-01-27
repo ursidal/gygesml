@@ -1,6 +1,7 @@
 
 type joueur =
-  | Nord | Sud ;;
+  | Nord | Sud
+;;
 
 type pion =
   | Vide
@@ -13,7 +14,10 @@ type case =
   |CaseSud
 ;;
 
-type deplacement =  case * case;;
+type deplacement =
+  |Init of joueur * (pion list)
+  |Depl of case * case
+;;
 
 
 type jeu = case*pion list;;

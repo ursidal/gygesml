@@ -72,13 +72,14 @@ let string_vers_array str =
 (* This is optional for such a simple example, but it is good to have an `init` function to define your initial model default values, the model for Counter is just an integer *)
 let init() =
   { partie= encours
-                ; joueur= Sud
-                ; pions= original
-                ; desc= false
-                ; choixprem = None
-                ; choixdeux = None
-                ; message = ""
-                }
+  ; phase = Encours
+  ; joueur= Sud
+  ; pions= original
+  ; desc= false
+  ; choixprem = None
+  ; choixdeux = None
+  ; message = ""
+  }
 
   
 let case_vers_string case =
@@ -109,7 +110,7 @@ let update model = function (* These should be simple enough to be self-explanat
       if Some case = model.choixprem
       then {model with choixprem = None}
       else
-        if List.exists (fun x -> x = case) (Gyges.depl_possibles model.partie prem)
+        if List.exists (fun x -> x = case) (Gyges.arrivees_possibles model.partie prem)
         then
           match case with
           |CaseNord -> {model with partie = Gyges.init_jeu ();
@@ -118,7 +119,7 @@ let update model = function (* These should be simple enough to be self-explanat
            |CaseSud -> {model with partie = Gyges.init_jeu ();
                                    choixprem = None;
                                    message = {js|Nord a gagné|js}}
-           |_ ->  {model with partie = Gyges.mise_a_jour model.partie (prem,case)
+           |_ ->  {model with partie = Gyges.mise_a_jour model.partie (Depl (prem,case))
                        ; joueur = if model.joueur=Sud then Nord else Sud
                        ; choixdeux = Some case
                        ; message = "deuxieme choix: "^(case_vers_string (Some case))
@@ -214,7 +215,7 @@ let vue_plateau model =
     [class' "plateau"; styles ["width", vers_pix cote
                               ;"height", vers_pix cote
     ]]
-    ((div [class' "bord-plateau"] [text ""])::nord::sud::(List.map appel carre))
+    ((div [class' "bord-plateau"] [text "Gyges"])::nord::sud::(List.map appel carre))
 ;;
 
 
@@ -226,8 +227,8 @@ let view model =
     [styles [("max-width","800px");("margin","auto");("background-color","#ccc")]]
     [ h3
         [ onClick ToggleDesc;styles [ ("text-align", "center")  ]] 
-        [ pre [styles [("margin","auto");("font-size","8px");("font-weight","bold")]] [text ascii_titre]
-        ; menu
+        [ (*pre [styles [("margin","auto");("font-size","8px");("font-weight","bold")]] [text ascii_titre]
+        ;*) menu
         ]
     ; if model.desc then p [] [text "Description de Gyges"] else noNode
     ; span [ style "font_size" "20px"] [text (String.concat " " (Array.to_list model.pions))]

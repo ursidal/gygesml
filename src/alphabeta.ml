@@ -13,8 +13,8 @@ let winscore = function
   
   
 let estMaximisant = function 
-	|Sud -> false 
-	|Nord -> true
+	|(_,Sud) -> false 
+	|(_,Nord) -> true
 	
 let rec fold_until fonction_et_test acc liste =
 	match liste with 
@@ -52,38 +52,39 @@ let rec alphabeta (jeu,joueur) alpha beta n =
 	  
 	  
 let compar jeu j1 j2 = 
-	match jeu with 
-	|(_,Sud) -> (snd j2) - (snd j1)
-	|(_,Nord) -> (snd j1) - (snd j2)
-
-	  
-let recherche_ab jeu n =
-	if n=0 || estTerminal jeu 
-	then eval_jeu jeu
-	else
-		let lsuiv = jeu_suiv jeu in
-		let lalphab = List.map (fun j-> (j,alphabeta n minScore maxScore j)) lsuiv in
-		List.sort (compar jeu) lalphab |> List.hd |> fst
-
+  match jeu with 
+  |(_,Sud) -> compare (snd j1) (snd j2)
+  |(_,Nord) -> compare (snd j2) (snd j1)
+             
+let fst3 (a,b,c) = a
+    
 let rec alphabeta n a b j =
-	if n = 0 || estTerminal j 
-	then eval_jeu j
-	else 
-		let lsuiv = jeu_suiv j in
-		let res = 
-			if estMaximisant j
-			then
-				let v = minScore in
-				fold_until maximin (v,a,b) lsuiv
-			else
-				let v = maxScore in
-				fold_until minimax (v,a,b) lsuiv
-		in fst3 res
-and maximin (v,a,b) j =
-	let v2 = max v (alphabeta (n-1) a b j) in
-	let a2 = max a v2 in
-	((v,a,b),a2>=b)
-and minimax (v,a,b) j =
-	let v2 = min v (alphabeta (n-1) a b j) in
-	let b2 = min b v2 in
-	((v,a,b),b2<=a)
+  if n = 0 || Gyges.estTerminal j 
+  then Gyges.eval_jeu j
+  else 
+    let lsuiv = Gyges.jeu_suiv j in
+    let res = 
+      if estMaximisant j
+      then
+	let v = Gyges.minScore in
+	fold_until (maximin (n-1)) (v,a,b) lsuiv
+      else
+	let v = Gyges.maxScore in
+	fold_until (minimax (n-1)) (v,a,b) lsuiv
+    in fst3 res
+and maximin n (v,a,b) j =
+  let v2 = max v (alphabeta n a b j) in
+  let a2 = max a v2 in
+  ((v,a,b),a2>=b)
+and minimax n (v,a,b) j =
+  let v2 = min v (alphabeta n a b j) in
+  let b2 = min b v2 in
+  ((v,a,b),b2<=a)
+
+let recherche_ab jeu n =
+  if n=0 || Gyges.estTerminal jeu 
+  then jeu
+  else
+    let lsuiv = Gyges.jeu_suiv jeu in
+    let lalphab = List.map (fun j-> (j,alphabeta n Gyges.minScore Gyges.maxScore j)) lsuiv in
+    List.sort_uniq (compar jeu) lalphab |> List.hd |> fst

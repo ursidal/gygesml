@@ -57,11 +57,9 @@ let cle_ajout cle valeur f = ajout_cle f cle valeur;;
 
 let mise_a_jour partie depl =
   match depl with 
-  |Init (j,l) -> let ligne_init = match j with
-  				|Sud -> 1
-				|Nord -> 6 
-		 in
-		 let update_list = List.map2 (fun i v -> ((ligne_init,i),v)) [1;2;3;4;5;6] l
+  |Init (j,l) -> let ligne_init = if j=Sud then 1 else 6
+	     	 in
+		 let update_list = List.map2 (fun i v -> (Case (i,ligne_init),v)) [1;2;3;4;5;6] l
 		 in List.append update_list partie
   |Depl (c1,c2) -> let p1 = pion_dans_case partie c1 in
   (c1,Vide)::(c2,p1):: partie
@@ -149,16 +147,30 @@ let departs_possibles jeu joueur =
   let ligne =  (premiere_ligne i) in
   List.filter (fun x -> (pion_dans_case jeu x)<>Vide) (List.map (fun x-> Case (x,ligne)) [1;2;3;4;5;6])
 ;;
-  
+
+let estTerminal (jeu,joueur) =
+  match joueur with
+  |Sud -> (pion_dans_case jeu CaseNord) <> Vide
+  |Nord -> (pion_dans_case jeu CaseSud) <> Vide
+
 let mouv_possibles jeu joueur = 
 	let ld = departs_possibles jeu joueur 
 	in
-	(List.map (fun dep -> List.map (fun arr -> (dep,arr)) (arrivees_possibles jeu dep)) ld) |> List.concat
+	(List.map (fun dep -> List.map (fun arr ->Depl (dep,arr)) (arrivees_possibles jeu dep)) ld) |> List.concat
 
 let jeu_suiv (pl,joueur) = 
 	let lmouv = mouv_possibles pl joueur in
 	List.map (fun m -> (mise_a_jour pl m, suivant joueur)) lmouv
 
+
+let eval_jeu (pl,joueur) =
+  match joueur with
+  |Sud -> if (pion_dans_case pl CaseNord)<> Vide then -100. else 0.
+  |Nord -> if (pion_dans_case pl CaseSud)<> Vide then 100. else 0.
+
+let minScore = -100.;;
+let maxScore = 100.;;
+         
 let rec string_of_vlist l=
  	match l with
     |[] -> "."

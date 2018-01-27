@@ -5,6 +5,7 @@
     border-radius: 40%;
     text-align: center;
     vertical-align: middle;
+    background: radial-gradient( #c1ff5b,#ffbd00);
 }
 
 .case-active {
@@ -31,7 +32,7 @@
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: #971539;
+    background-color: #df053f;
     animation-fill-mode: forwards;
   border-radius: 0%;
   border: 2px solid #000;
@@ -54,7 +55,7 @@
     -webkit-transform: rotate(0deg);
   }
   to {
-    -webkit-transform: rotate(45deg);
+    -webkit-transform: rotate(-45deg);
   }
 }
 @-moz-keyframes Rotate {
@@ -62,7 +63,7 @@
     -moz-transform: rotate(0deg);
   }
   to {
-    -moz-transform: rotate(45deg);
+    -moz-transform: rotate(-45deg);
   }
 }
 @-ms-keyframes Rotate {
@@ -70,6 +71,6 @@
     -ms-transform: rotate(0deg);
   }
   to {
-    -ms-transform: rotate(45deg);
+    -ms-transform: rotate(-45deg);
   }
 }
